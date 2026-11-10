@@ -1,0 +1,48 @@
+# CI cho zig-mobile (v0.3.0).
+#
+# CHƯA TỪNG CHẠY TRÊN GITHUB: repo này chưa từng push lên GitHub
+# (chỉ làm local), nên file workflow này mới chỉ là file — chưa có
+# lần chạy nào, chưa có badge xanh nào. Khi nào push repo lên thì
+# GitHub Actions sẽ chạy các job dưới đây.
+#
+# Job test chạy unit test trên host (Linux x86_64).
+# Job android/ios cross-compile ra libmobile.so / libmobile.a
+# (không cần Android SDK/NDK hay Xcode — Zig tự cross-compile).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: zig build test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.17.1
+      - run: zig build test --summary all
+
+  android:
+    name: zig build android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.17.1
+      - run: zig build android
+      - run: ls -la zig-out/lib/android/arm64-v8a/libmobile.so
+
+  ios:
+    name: zig build ios
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.17.1
+      - run: zig build ios
+      - run: ls -la zig-out/lib/ios/libmobile.a
