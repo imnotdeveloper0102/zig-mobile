@@ -1,0 +1,56 @@
+// Module app của project Android mẫu dùng zig-mobile.
+//
+// libmobile.so (build từ Zig) đặt ở app/src/main/jniLibs/arm64-v8a/
+// (xem README). Gradle chỉ đóng gói file .so có sẵn, không build Zig.
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.zigmobile.app"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.zigmobile.app"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "0.3.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        // MainActivity.kt dùng BuildConfig.VERSION_NAME.
+        buildConfig = true
+    }
+
+    sourceSets {
+        getByName("main") {
+            // .so cho arm64-v8a đặt ở đây, Gradle đóng gói thẳng vào APK.
+            jniLibs.srcDirs("src/main/jniLibs")
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.13.1")
+}

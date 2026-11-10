@@ -1,0 +1,16 @@
+.{
+    .name = .zig_mobile,
+    .version = "0.3.0",
+    .fingerprint = 0x7023f867d69782a6,
+    .minimum_zig_version = "0.17.1",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "examples",
+        "README.md",
+        "CHANGELOG.md",
+        "docs",
+    },
+}
